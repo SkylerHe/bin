@@ -1,0 +1,40 @@
+###
+# Expected Output:
+# [branch?][host(user)////dir]:
+###
+
+# Git branch detection function
+parse_git_branch() {
+  # Get the branch name and check for untracked files
+  local branch_name
+  branch_name=$(git branch 2>/dev/null | grep '^\*' | sed 's/* //')
+
+  # Check if there are untracked files
+  if git status --porcelain 2>/dev/null | grep -q '^??'; then
+    branch_name="${branch_name}?"
+  fi
+
+  echo "$branch_name"
+}
+
+# Function to customize the prompt
+prompter() {
+  # Check if we're in a Git repository and get the branch name if available
+  local git_branch=$(parse_git_branch)
+
+  # Get the hostname, user, and current directory
+  local user=%n
+  local host=%m
+  local dir=%~
+
+  # Check if inside a git repo, and construct the prompt accordingly
+  if [ -n "$git_branch" ]; then
+    PS1="[$git_branch][$host($user): $dir] "
+  else
+    PS1="[$host($user): $dir] "
+  fi
+}
+
+# Add prompter to be called before each prompt is displayed
+precmd_functions+=(prompter)
+
