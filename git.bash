@@ -1,4 +1,4 @@
-[ -z "$PS1" ] && return
+[ -z $PS1 ] && return
 ###
 # This file of git macros is provided by University of Richmond.
 # The commands work on our machines --- they may not work on yours.
@@ -1048,6 +1048,64 @@ function gitbranchlrt
     echo -e `git log -1 --pretty=format:"%Cgreen%ci %Cblue%cr%Creset" $k --`\\t"$k"; 
   done | sort
 }
+
+function perms
+{
+  if [ -z $1 ]; then
+    echo 'Usage: perms {/sufficiently/qualified/directory/or/file/name}'
+    return
+  fi
+
+  problem="$1"
+  if [ "$problem" == "." ]; then
+    problem=`pwd`
+  fi
+  if [ -f "$problem" ]; then
+    problem=`readlink -f $problem`
+  elif [ -d "$problem" ]; then
+    echo ' '
+  else
+    echo "Cannot make sense of $problem"
+    return
+  fi
+
+  touch /tmp/x
+  rm -f /tmp/x
+
+  tabs 10
+
+  echo "Access permissions for $problem"
+  echo "===================================================="
+  echo " "
+
+  while true ; do
+    if [ -f "$problem" ]; then
+      ls -l "$problem" | awk '{print $1"\t"$3"\t"$4"\t"$9}' >> /tmp/x
+    else
+      ls -ld "$problem" | awk '{print $1"\t"$3"\t"$4"\t"$9}' >> /tmp/x
+    fi
+    [[ "$problem" != "/" ]] || break
+    problem="$( dirname "$problem" )"
+  done
+  sed '1!G;h;$!d' < /tmp/x
+  rm -f /tmp/x
+}
+
+hg()
+{
+    if [ -z $1 ]; then
+        echo 'Usage: hg {search-term}'
+        return
+    fi
+    history | grep "$1"
+}
+
+function isrunning
+{
+    ps -ef | sed -n "1p; /$1/p;" | grep -v 'sed -n'
+}
+
+
 
 # declare -F | sort | awk '{print $3}'
 
