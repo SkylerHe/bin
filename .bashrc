@@ -1,9 +1,9 @@
-[ -z "$PS1" ] && return
-# .bashrc
-
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
+  . /etc/bashrc
+  if groups `whoami` | grep -q people; then
+      . /usr/local/etc/usersrc/common
+  fi
 fi
 
 # User specific environment
@@ -15,26 +15,26 @@ export PATH
 
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
-
 # User specific aliases and functions
 if [ -d ~/.bashrc.d ]; then
-	for rc in ~/.bashrc.d/*; do
-		if [ -f "$rc" ]; then
-			. "$rc"
-		fi
-	done
+    for rc in ~/.bashrc.d/*; do
+        if [ -f "$rc" ]; then
+            . "$rc"
+        fi
+    done
 fi
 
 unset rc
 
 export MODULEPATH=/usr/local/ur/modulefiles
 
+
+# Github
+export LD_LIBRARY_PATH=
 source ~/bin/git.bash
-#source ~/wstools.bash
-export hpclib=/usr/local/hpclib
-export PYTHONPATH="$hpclib"
 
 
+#source /usr/local/sw/urtools/bigprompt
 # Function to run the pull script when entering a directory
 function chpwd() {
     if [ -d .git ]; then
@@ -46,23 +46,15 @@ function chpwd() {
 PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;}chpwd"
 
 
-eval "$(/usr/local/anaconda3/bin/conda shell.bash hook)"
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/usr/local/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/usr/etc/profile.d/conda.sh" ]; then
-        . "/usr/etc/profile.d/conda.sh"
-    else
-        export PATH="/usr/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-alias vi=/usr/bin/vim
-alias spdr="ssh installer@spydur"
+# User specific aliases and functions
+PATH=$PATH:/scratch/myang_shared/software/Admixtools/bin/
+
+# Paths for YangLab directory
+alias cdm='cd /scratch/myang_shared'
+alias cdmd='cd /scratch/myang_shared/data'
+alias cdjp='cd /scratch/myang_shared/lab/Skyler'
 alias back="cd -"
-umask 002
+alias bh="ssh skyler@billieholiday"
+alias spdr="ssh installer@spydur"
+alias up="cd .."
