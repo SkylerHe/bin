@@ -163,7 +163,7 @@ export      NO_COLOR="\[\e[0m\]"
 export       REVERSE="\[\e[7m\]"
 
 #### Change this to suit yourself.
-export PROMPT_COLOR=$ORANGE
+export PROMPT_COLOR=$LIGHT_CYAN
 
 # Read the name of this machine into a variable. Note: this works even
 # on AIX.
@@ -1107,15 +1107,15 @@ function isrunning
 
 
 
-# declare -F | sort | awk '{print $3}'
 
-echo " .... . . . . "
-echo "You've got git workflow!"
-echo " "
-echo "Type 'workflowhelp' at the prompt to find out more."
-echo " "
-if [ $(hostname) == 'spydur.cluster' ]; then
-    export PROMPT_COLOR=$LIGHT_CYAN
-else
-    export PROMPT_COLOR=$WHITE
-fi
+
+
+
+
+
+
+
+
+
+
+
