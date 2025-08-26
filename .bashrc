@@ -34,9 +34,6 @@ alias ll="ls -l "
 alias vi="vim "
 alias rm="rm -i "
 alias mv="mv -i "
-alias yh="ssh yh6km@spydur"
-alias bh="ssh skyler@billieholiday"
-alias arach="ssh yh6km@arachne"
 texclean()
 {
     if [ -z $1 ]; then
