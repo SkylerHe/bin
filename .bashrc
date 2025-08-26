@@ -22,7 +22,7 @@ fi
 # names and aliases
 # >>>>>>>>>>>>>>>>>>>>>
 
-export EDITOR=`which vim`
+export EDITOR=`which nvim || which vim`
 export me=`whoami`
 
 shopt -s cdable_vars
@@ -31,7 +31,7 @@ shopt -s checkwinsize
 export CPUNAME=$(hostname | awk -F. '{print $1}')
 export PS1="["$CPUNAME":\w]: "
 alias ll="ls -l "
-alias vi="vim "
+alias vi="nvim "
 alias rm="rm -i "
 alias mv="mv -i "
 texclean()
@@ -74,7 +74,7 @@ texclean()
 recent()
 {
     extension=${1:-tex}
-    vim `ls -1t | grep "\.$extension" | head -1`
+    nvim `ls -1t | grep "\.$extension" | head -1`
 }
 
 undeux()
@@ -341,10 +341,10 @@ function viremote
   localcopy=${last##*/}
   scp "$last" " $localcopy "
   if [[ $numinnerparams -eq 0 ]]; then
-    vi "$localcopy"
+    nvim "$localcopy"
   else
     newparams=${@:1:$numinnerparams}
-    vi "$newparams" "$localcopy"
+    nvim "$newparams" "$localcopy"
   fi
   scp "$localcopy" "$last"
   popd > /dev/null 2>&1
@@ -352,7 +352,7 @@ function viremote
 
 function e()
 {
-    vim `ls -1rt * | tail -1`    
+    nvim `ls -1rt * | tail -1`    
 }
 
 myscreen()
@@ -384,7 +384,7 @@ hg()
 
 function editrc
 {
-  vi ~/.bashrc
+  nvim ~/.bashrc
   source ~/.bashrc
 }
 
@@ -656,6 +656,16 @@ EOD
 
 export LS_COLORS=$LS_COLORS:'di=0;35:'
 export HISTTIMEFORMAT="%d/%m/%y %T "
+
+# Check and install Homebrew if not present
+if ! command -v brew &> /dev/null; then
+    echo "Homebrew not found. Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    # Add Homebrew to PATH for current session
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+else
+    echo "Homebrew is already installed."
+fi
 
 # Find out if git is around.
 if [ ! -z `which git 2>/dev/null` ]; then
